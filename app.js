@@ -13,7 +13,7 @@ const secretKey = 'YourSecretKeyHere';
 fs.readdir(path.join(__dirname, 'input'), (err, files) => {
 	// console.log(err);
 	if (err) {
-		console.log('Please create an input folder and put encrypted files in it.');
+		console.log('Please create an input folder and put encrypted files in it.'.bold.red);
 		return;
 	}
 	fs.mkdir(path.join(__dirname, 'output'), { recursive: true }, (err) => {
@@ -21,7 +21,10 @@ fs.readdir(path.join(__dirname, 'input'), (err, files) => {
 	});
 	console.log(files);
 	files.forEach((fileName) => {
-		console.log(fileName);
+		// console.log(fileName);
+		if (!fileName.includes('.csv')) {
+			return;
+		}
 		// Read the CSV file (for Node.js)
 		const csvFilePath = path.join(__dirname, 'input', fileName); // Replace with your file path
 		const file = fs.createReadStream(csvFilePath, 'utf8');
@@ -34,11 +37,18 @@ fs.readdir(path.join(__dirname, 'input'), (err, files) => {
 			// var decrypted = CryptoJS.AES.decrypt(results.data[1][0], secretKey).toString(
 			// 	CryptoJS.enc.Utf8
 			// );
+			results.data[0].splice(2, 0, 'Email');
+			results.data[0].splice(3, 0, 'Phone Number');
 			for (let i = 1; i < results.data.length; i++) {
+				// console.log(results.data[i]);
+				results.data[i].splice(2, 0, decryptedEmail);
+
 				var decryptedEmail = CryptoJS.AES.decrypt(results.data[i][0], secretKey).toString(CryptoJS.enc.Utf8);
-				results.data[i][0] = decryptedEmail;
+				// results.data[i][0] = decryptedEmail;
+				results.data[i].splice(2, 0, decryptedEmail);
 				var decryptedPhone = CryptoJS.AES.decrypt(results.data[i][1], secretKey).toString(CryptoJS.enc.Utf8);
-				results.data[i][1] = decryptedPhone;
+				// results.data[i][1] = decryptedPhone;
+				results.data[i].splice(3, 0, decryptedPhone);
 			}
 			const csvString = Papa.unparse(results);
 			// const filePath = path.join(path.dirname(process.execPath), '/output.csv');
