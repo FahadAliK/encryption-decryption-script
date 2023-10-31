@@ -41,8 +41,6 @@ fs.readdir(path.join(__dirname, 'input'), (err, files) => {
 			results.data[0].splice(3, 0, 'Phone Number');
 			for (let i = 1; i < results.data.length; i++) {
 				// console.log(results.data[i]);
-				results.data[i].splice(2, 0, decryptedEmail);
-
 				var decryptedEmail = CryptoJS.AES.decrypt(results.data[i][0], secretKey).toString(CryptoJS.enc.Utf8);
 				// results.data[i][0] = decryptedEmail;
 				results.data[i].splice(2, 0, decryptedEmail);
