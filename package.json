@@ -14,5 +14,10 @@
 		"colors": "^1.4.0",
 		"crypto-js": "^4.1.1",
 		"papaparse": "^5.4.1"
+	},
+	"pkg": {
+		"targets": [
+			"node16-macos-x64"
+		]
 	}
 }
