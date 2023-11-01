@@ -27,13 +27,18 @@ function handleCSVData(results) {
 	results.data[0].splice(2, 0, 'Email');
 	results.data[0].splice(3, 0, 'Phone Number');
 	for (let i = 1; i < results.data.length; i++) {
+		// console.log(i, results.data[i]);
 		// console.log(results.data[i]);
-		var decryptedEmail = CryptoJS.AES.decrypt(results.data[i][0], secretKey).toString(CryptoJS.enc.Utf8);
-		// results.data[i][0] = decryptedEmail;
-		results.data[i].splice(2, 0, decryptedEmail);
-		var decryptedPhone = CryptoJS.AES.decrypt(results.data[i][1], secretKey).toString(CryptoJS.enc.Utf8);
-		// results.data[i][1] = decryptedPhone;
-		results.data[i].splice(3, 0, decryptedPhone);
+		try {
+			var decryptedEmail = CryptoJS.AES.decrypt(results.data[i][0], secretKey).toString(CryptoJS.enc.Utf8);
+			var decryptedPhone = CryptoJS.AES.decrypt(results.data[i][1], secretKey).toString(CryptoJS.enc.Utf8);
+			// results.data[i][0] = decryptedEmail;
+			results.data[i].splice(2, 0, decryptedEmail);
+			// results.data[i][1] = decryptedPhone;
+			results.data[i].splice(3, 0, decryptedPhone);
+		} catch (error) {
+			// console.log(i, error);
+		}
 	}
 	const csvString = Papa.unparse(results);
 
@@ -52,7 +57,6 @@ function handleCSVData(results) {
 // Parse the CSV file
 Papa.parse(file, {
 	header: false, // Treat the first row as a header
-	dynamicTyping: true, // Automatically convert numbers and booleans
 	complete: handleCSVData, // Callback function to handle the parsed data
 	error: (error) => console.error('CSV parsing error:', error.message),
 });
