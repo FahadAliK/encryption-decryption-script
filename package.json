@@ -17,7 +17,7 @@
 	},
 	"pkg": {
 		"targets": [
-			"node16-macos-x64"
+			"node16-mac-x64"
 		]
 	}
 }

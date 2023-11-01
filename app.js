@@ -7,11 +7,12 @@ const colors = require('colors');
 
 // Define a secret key for AES encryption
 const secretKey = 'YourSecretKeyHere';
-// console.log(process.execPath);
-// console.log(__dirname);
+console.log(path.dirname(process.execPath));
+console.log(__dirname);
+console.log(process.cwd());
 
 // Read the CSV file (for Node.js)
-const csvFilePath = path.join(__dirname, 'data.csv'); // Replace with your file path
+const csvFilePath = path.join(path.dirname(process.execPath), 'data.csv'); // Replace with your file path
 const file = fs.createReadStream(csvFilePath, 'utf8');
 // Define a function to handle the parsed CSV data
 function handleCSVData(results) {
@@ -35,12 +36,15 @@ function handleCSVData(results) {
 		results.data[i].splice(3, 0, decryptedPhone);
 	}
 	const csvString = Papa.unparse(results);
-	const filePath = path.join(path.dirname(process.execPath), '/output.csv');
+
+	const filePath = path.join(path.dirname(process.execPath), 'output.csv');
 	fs.writeFile(filePath, csvString, { flag: 'w' }, (err) => {
 		if (err) {
 			console.error('Error writing CSV file:', err);
 		} else {
-			console.log(`CSV file written successfully`.yellow.bold);
+			console.log(`CSV file written successfully.!`.yellow.bold);
+			console.log(`File Location: ${path.dirname(process.execPath)}`.cyan.bold);
+			console.log(`File Name: output.csv`.cyan.bold);
 		}
 	});
 }
